@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>forge® — Startup Studio & Pre-seed Fund</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html{
+    scroll-behavior:smooth;
+    scroll-snap-type:y mandatory;
+  }
+  html,body{margin:0;padding:0}
+  body{
+    background:#F1F1F1;
+    color:#121212;
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  a[role="button"],[data-scroll-target],[data-mail]{cursor:pointer}
+
+  /* Scale tokens — --s is a LENGTH (1px baseline at 1920+ viewports, scales down on smaller).
+     Figma px values are used as unitless multipliers: calc(96 * var(--s)). */
+  :root{
+    --s: 1px;
+    --ink:#121212;
+    --bg:#F1F1F1;
+    --lime:#F3FE19;
+    --muted:#666666;
+    --dark-bg:#0F0F0F;
+    --dark-line:#2E2E2E;
+    --dark-muted:#8C8C8C;
+    --watermark:#E3E3E3;
+    --side: calc(96 * var(--s));
+  }
+  @media (max-width: 1919.98px){
+    :root{ --s: calc(100vw / 1920); }
+  }
+  @media (min-width: 2688px){
+    :root{ --s: 1.4px; }
+  }
+
+  /* === FLOATING NAV ============================================ */
+  .float-nav{
+    position:fixed;
+    top: calc(20 * var(--s));
+    left:50%;
+    transform:translateX(-50%);
+    z-index:50;
+    display:flex;
+    align-items:center;
+    gap: calc(28 * var(--s));
+    padding: calc(8 * var(--s)) calc(10 * var(--s)) calc(8 * var(--s)) calc(22 * var(--s));
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-radius:999px;
+    border:1px solid rgba(18,18,18,0.08);
+    color:var(--ink);
+    transition: background .35s ease, color .35s ease, border-color .35s ease;
+  }
+  .float-nav .brand{
+    display:inline-flex;align-items:center;gap: calc(8 * var(--s));
+    font-weight:700;font-size: calc(15 * var(--s));
+    letter-spacing:.2px;
+  }
+  .float-nav .brand svg{width: calc(14 * var(--s));height: calc(14 * var(--s));display:block}
+  .float-nav .links{display:flex;align-items:center;gap: calc(22 * var(--s))}
+  .float-nav .links a{
+    font-size: calc(13 * var(--s));
+    font-weight:500;
+    opacity:.62;
+    transition:opacity .2s, color .2s;
+    padding: calc(6 * var(--s)) 0;
+  }
+  .float-nav .links a:hover{opacity:1}
+  .float-nav .links a.active{opacity:1;font-weight:600;color:#121212}
+  .float-nav .cta{
+    display:inline-flex;align-items:center;gap: calc(6 * var(--s));
+    background:#121212;color:#fff;
+    padding: calc(9 * var(--s)) calc(16 * var(--s));
+    border-radius:999px;
+    font-weight:600;font-size: calc(13 * var(--s));
+    transition: background .25s;
+  }
+  .float-nav .cta svg{width: calc(11 * var(--s));height: calc(11 * var(--s));stroke:#fff;fill:none;stroke-width:2}
+  .float-nav .cta:hover{background:#000}
+
+  .float-nav.is-dark{
+    background: rgba(20,20,20,0.55);
+    border-color: rgba(255,255,255,0.08);
+    color:#fff;
+  }
+  .float-nav.is-dark .links a{color:#fff}
+  .float-nav.is-dark .links a.active{color:var(--lime)}
+  .float-nav.is-dark .cta{background:var(--lime);color:#121212}
+  .float-nav.is-dark .cta svg{stroke:#121212}
+
+  @media (max-width: 820px){
+    .float-nav .links{display:none}
+    .float-nav{gap: calc(14 * var(--s));padding-left: calc(16 * var(--s))}
+  }
+
+  /* === PAGE WRAPPER =========================================== */
+  .page{
+    position:relative;
+    width:100%;
+    max-width: calc(1920 * var(--s));
+    margin:0 auto;
+  }
+
+  /* === HERO =================================================== */
+  .hero{
+    position:relative;
+    width:100%;
+    aspect-ratio: 1920 / 1080;
+    background:var(--bg);
+    overflow:hidden;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+  }
+  .hero .watermark{
+    position:absolute;
+    left: calc(380 * var(--s));
+    top: calc(560 * var(--s));
+    color:var(--watermark);
+    font-weight:900;
+    font-size: calc(460 * var(--s));
+    line-height:1;
+    letter-spacing:-0.04em;
+    user-select:none;
+    pointer-events:none;
+  }
+  .hero .mission{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(36 * var(--s));
+    display:inline-flex;align-items:center;gap: calc(10 * var(--s));
+    font-size: calc(14 * var(--s));font-weight:500;
+  }
+  .hero .mission .mark{
+    width: calc(18 * var(--s));
+    height: calc(18 * var(--s));
+    display:inline-block;
+  }
+  .hero .mission .mark svg{width:100%;height:100%;display:block;fill:none;stroke:#121212;stroke-width:1.35}
+  .hero .tagline{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(36 * var(--s));
+    width: calc(220 * var(--s));
+    text-align:right;
+    font-size: calc(13 * var(--s));
+    font-weight:400;
+    line-height:1.4;
+  }
+  .hero .headline{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(96 * var(--s));
+    width: calc(900 * var(--s));
+    text-align:right;
+    font-weight:700;
+    font-size: calc(144 * var(--s));
+    line-height: 0.92;
+    letter-spacing:-0.035em;
+    margin:0;
+  }
+  .hero .cta-pill{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(800 * var(--s));
+    display:inline-flex;align-items:center;gap: calc(18 * var(--s));
+  }
+  .hero .cta-pill .circle{
+    width: calc(72 * var(--s));height: calc(72 * var(--s));
+    background:#121212;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    transition:transform .25s ease;
+  }
+  .hero .cta-pill:hover .circle{transform:translateX(6px)}
+  .hero .cta-pill .circle svg{width: calc(28 * var(--s));height: calc(28 * var(--s));stroke:#fff;fill:none;stroke-width:1.75}
+  .hero .cta-pill .label{font-size: calc(16 * var(--s));font-weight:600}
+
+  .hero .accent-card{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(320 * var(--s));
+    width: calc(360 * var(--s));
+    height: calc(720 * var(--s));
+    padding: calc(28 * var(--s)) calc(32 * var(--s));
+    background:var(--lime);
+    display:flex;
+    flex-direction:column;
+    gap: calc(18 * var(--s));
+  }
+  .hero .accent-card .brand{
+    display:inline-flex;align-items:center;gap: calc(10 * var(--s));
+    font-weight:700;font-size: calc(22 * var(--s));
+  }
+  .hero .accent-card .brand svg{width: calc(22 * var(--s));height: calc(22 * var(--s));fill:none;stroke:#121212;stroke-width:2}
+  .hero .accent-card p{margin:0;font-size: calc(14 * var(--s));line-height:1.43}
+  .hero .accent-card .bold{font-weight:700}
+  .hero .accent-card .spacer{flex:1}
+  .hero .accent-card .more{
+    display:inline-flex;align-items:center;gap: calc(8 * var(--s));
+    font-weight:600;font-size: calc(15 * var(--s));
+  }
+  .hero .accent-card .more svg{width: calc(13 * var(--s));height: calc(13 * var(--s));fill:none;stroke:#121212;stroke-width:1.5}
+
+  .hero .est-badge{
+    position:absolute;
+    left: calc(540 * var(--s));
+    top: calc(980 * var(--s));
+  }
+  .hero .est-badge .lbl{font-size: calc(13 * var(--s));font-weight:500}
+  .hero .est-badge .year{
+    font-size: calc(36 * var(--s));font-weight:700;line-height:1;margin-top: calc(2 * var(--s));
+  }
+  .hero .est-badge .meta{
+    margin-top: calc(-12 * var(--s));
+    margin-left: calc(110 * var(--s));
+    font-size: calc(18 * var(--s));font-weight:400;
+    display:inline-flex;gap: calc(10 * var(--s));
+  }
+  .hero .stamp{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(980 * var(--s));
+    text-align:right;
+    font-size: calc(15 * var(--s));
+    font-weight:500;
+    line-height:1.35;
+  }
+
+  /* === EYEBROW ================================================ */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap: calc(12 * var(--s));
+    font-size: calc(13 * var(--s));font-weight:500;
+  }
+  .eyebrow .dash{font-weight:400}
+  .eyebrow .name{letter-spacing:0.04em}
+
+  /* === THREAD ZONE (sections 01-03 wrapper) === */
+  .thread-zone{position:relative}
+
+  /* Gaps between sections */
+  .section-numbers,
+  .section-process,
+  .section-portfolio,
+  .section-apply{ margin-top: calc(140 * var(--s)); }
+
+  /* === SECTION 01 — NUMBERS =================================== */
+  .section{
+    position:relative;
+    width:100%;
+    background:var(--bg);
+    overflow:hidden;
+    z-index:2;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+  }
+  .section-numbers,
+  .section-process,
+  .section-portfolio{
+    height: calc(888 * var(--s));
+  }
+  .section-numbers,
+  .section-process{overflow:visible}
+  .section .eyebrow-pos{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(80 * var(--s));
+  }
+  .section .meta-right{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(84 * var(--s));
+    text-align:right;
+    font-size: calc(13 * var(--s));font-weight:500;
+    color:var(--muted);
+  }
+  .section-numbers h2{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(130 * var(--s));
+    width: calc(1100 * var(--s));
+    margin:0;
+    font-size: calc(112 * var(--s));font-weight:700;
+    line-height:0.92;letter-spacing:-0.03em;
+  }
+  .stats{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(400 * var(--s));
+    width: calc(1728 * var(--s));
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: calc(32 * var(--s));
+  }
+  .stat{display:flex;flex-direction:column;gap: calc(18 * var(--s))}
+  .stat .rule{height: calc(2 * var(--s));background:#121212}
+  .stat .num{
+    font-size: calc(162 * var(--s));font-weight:700;
+    line-height:0.92;letter-spacing:-0.04em;
+  }
+  .stat .lbl{font-size: calc(18 * var(--s));font-weight:600}
+  .stat .sub{font-size: calc(13 * var(--s));font-weight:400;color:var(--muted);line-height:1.4}
+  .section-notes{
+    position:absolute;
+    left: calc(96 * var(--s));
+    width: calc(1728 * var(--s));
+    bottom: calc(82 * var(--s));
+    transform: translateY(20px);
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: calc(32 * var(--s));
+  }
+  .note{
+    display:flex;
+    flex-direction:column;
+    gap: calc(10 * var(--s));
+  }
+  .note .kicker{
+    margin:0;
+    font-size: calc(12 * var(--s));
+    font-weight:700;
+    line-height:1;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  .note p{
+    margin:0;
+    color:var(--muted);
+    font-size: calc(14 * var(--s));
+    font-weight:400;
+    line-height:1.46;
+  }
+  .runway-strip{
+    position:absolute;
+    left: calc(536 * var(--s));
+    bottom:-66px;
+    width: calc(1288 * var(--s));
+    display:grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(32 * var(--s));
+  }
+  .runway-item{
+    min-height: calc(52 * var(--s));
+    padding-top: calc(10 * var(--s));
+  }
+  .runway-head{
+    display:flex;
+    align-items:baseline;
+    gap: calc(10 * var(--s));
+    margin-bottom: calc(6 * var(--s));
+  }
+  .runway-head span:first-child{
+    font-size: calc(11 * var(--s));
+    font-weight:700;
+  }
+  .runway-head span:last-child{
+    font-size: calc(14 * var(--s));
+    font-weight:700;
+  }
+  .runway-item p{
+    margin:0;
+    color:var(--muted);
+    font-size: calc(11 * var(--s));
+    line-height:1.3;
+  }
+
+  /* === SECTION 02 — PROCESS =================================== */
+  .section-process .huge-title{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(160 * var(--s));
+    width: calc(620 * var(--s));
+    margin:0;
+    font-size: calc(168 * var(--s));font-weight:700;
+    line-height:0.88;letter-spacing:-0.04em;
+  }
+  .steps{
+    position:absolute;
+    left: calc(816 * var(--s));
+    top: calc(160 * var(--s));
+    width: calc(1020 * var(--s));
+    display:flex;flex-direction:column;
+  }
+  .step{
+    padding: calc(28 * var(--s)) 0;
+    border-top:1px solid #D1D1D1;
+    display:grid;
+    grid-template-columns:
+      calc(60 * var(--s))
+      calc(280 * var(--s))
+      1fr
+      calc(28 * var(--s));
+    gap: calc(48 * var(--s));
+    align-items:start;
+  }
+  .step:last-child{border-bottom:1px solid #D1D1D1}
+  .step .n{font-size: calc(22 * var(--s));font-weight:700}
+  .step .ttl{font-size: calc(36 * var(--s));font-weight:700;line-height:1}
+  .step .txt{font-size: calc(15 * var(--s));font-weight:400;line-height:1.47;color:var(--muted)}
+  .step .arrow{
+    width: calc(28 * var(--s));height: calc(28 * var(--s));
+    fill:none;stroke:#121212;stroke-width:2;
+  }
+  .process-card{
+    position:absolute;
+    left: calc(816 * var(--s));
+    width: calc(1020 * var(--s));
+    top: calc(646 * var(--s));
+    height: calc(332 * var(--s));
+    background:var(--lime);
+    display:grid;
+    grid-template-columns: calc(360 * var(--s)) 1fr;
+    gap: calc(44 * var(--s));
+    align-items:center;
+    padding: calc(190 * var(--s)) calc(38 * var(--s)) calc(30 * var(--s));
+  }
+  .process-card .metric{
+    display:flex;
+    align-items:baseline;
+    gap: calc(18 * var(--s));
+    color:#121212;
+  }
+  .process-card .metric strong{
+    font-size: calc(82 * var(--s));
+    font-weight:700;
+    line-height:.88;
+    letter-spacing:-0.05em;
+  }
+  .process-card .metric span{
+    font-size: calc(22 * var(--s));
+    font-weight:700;
+  }
+  .process-card .mini-steps{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(22 * var(--s));
+  }
+  .process-card .mini-step{
+    display:flex;
+    flex-direction:column;
+    gap: calc(8 * var(--s));
+  }
+  .process-card .mini-step span{
+    font-size: calc(11 * var(--s));
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .process-card .mini-step strong{
+    font-size: calc(24 * var(--s));
+    font-weight:700;
+    line-height:1;
+  }
+
+  /* === SECTION 03 — PORTFOLIO ================================= */
+  .section-portfolio h2{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(130 * var(--s));
+    width: calc(900 * var(--s));
+    margin:0;
+    font-size: calc(112 * var(--s));font-weight:700;
+    line-height:0.92;letter-spacing:-0.03em;
+  }
+  .section-portfolio{
+    height: calc(1071 * var(--s));
+    overflow:visible;
+  }
+  .view-all{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(80 * var(--s));
+    display:inline-flex;align-items:center;gap: calc(8 * var(--s));
+    font-size: calc(14 * var(--s));font-weight:600;
+  }
+  .view-all svg{width: calc(13 * var(--s));height: calc(13 * var(--s));fill:none;stroke:#121212;stroke-width:1.5}
+  .tiles{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(360 * var(--s));
+    width: calc(1728 * var(--s));
+    height: calc(380 * var(--s));
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: calc(24 * var(--s));
+  }
+  .tile{
+    position:relative;
+    border-radius:0;
+    overflow:hidden;
+    background:#1A1A1A;
+    color:#fff;
+  }
+  .tile.lime{background:var(--lime);color:#121212}
+  .tile .mono{
+    position:absolute;
+    left: calc(7 * var(--s));
+    top: calc(-47 * var(--s));
+    font-size: calc(380 * var(--s));
+    font-weight:900;line-height:0.9;
+    letter-spacing:-0.06em;
+    color:inherit;
+  }
+  .tile .badge{
+    position:absolute;
+    left: calc(27 * var(--s));
+    top: calc(24 * var(--s));
+    min-height: calc(24 * var(--s));
+    padding: 0 calc(9 * var(--s));
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    border:1px solid #1A1A1A;
+    background:#1A1A1A;
+    color:#fff;
+    font-size: calc(10 * var(--s));font-weight:600;
+    letter-spacing:0.04em;
+  }
+  .tile.lime .badge{background:var(--lime);color:#121212;border-color:var(--lime)}
+  .tile .metric{
+    position:absolute;
+    right: calc(24 * var(--s));
+    top: calc(24 * var(--s));
+    font-size: calc(24 * var(--s));font-weight:700;
+    text-align:right;
+  }
+  .tile .meta{
+    position:absolute;
+    left: calc(24 * var(--s));
+    bottom: calc(40 * var(--s));
+    transform: translateY(10px);
+    display:flex;flex-direction:column;gap: calc(6 * var(--s));
+  }
+  .tile .meta .name{font-size: calc(28 * var(--s));font-weight:700}
+  .tile .meta .cat{font-size: calc(13 * var(--s));font-weight:500;color:#B3B3B3}
+  .tile.lime .meta .cat{color:#262626}
+  .portfolio-details{
+    position:absolute;
+    left: calc(96 * var(--s));
+    width: calc(1728 * var(--s));
+    top: calc(832 * var(--s));
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: calc(24 * var(--s));
+  }
+
+  /* === SECTION 04 — APPLY ===================================== */
+  .section-apply{
+    position:relative;
+    width:100%;
+    margin-top:0;
+    height: calc(911 * var(--s));
+    background:var(--dark-bg);
+    color:#fff;
+    overflow:hidden;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+  }
+  .section-apply .watermark-r{
+    position:absolute;
+    left: calc(960 * var(--s));
+    top: calc(320 * var(--s));
+    font-size: calc(360 * var(--s));font-weight:900;
+    color:var(--dark-line);line-height:1;letter-spacing:-0.04em;
+    user-select:none;pointer-events:none;
+  }
+  .section-apply .eyebrow-pos{position:absolute;left: calc(96 * var(--s));top:74px;color:#fff}
+  .section-apply .eyebrow .dash,
+  .section-apply .eyebrow .name,
+  .section-apply .eyebrow span{color:#fff}
+  .section-apply .status{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(80 * var(--s));
+    display:inline-flex;align-items:center;gap: calc(10 * var(--s));
+    font-size: calc(13 * var(--s));font-weight:500;
+  }
+  .section-apply .status .dot{
+    width: calc(10 * var(--s));height: calc(10 * var(--s));
+    background:var(--lime);border-radius:50%;
+  }
+  .section-apply h2{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(160 * var(--s));
+    width: calc(900 * var(--s));
+    margin:0;
+    font-size: calc(192 * var(--s));font-weight:700;
+    line-height:0.9;letter-spacing:-0.035em;
+  }
+  .section-apply .copy{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(560 * var(--s));
+    width: calc(620 * var(--s));
+    font-size: calc(17 * var(--s));font-weight:400;
+    line-height:1.52;color:var(--dark-muted);
+  }
+  .section-apply .pitch{
+    position:absolute;
+    left: calc(720 * var(--s));
+    top: calc(560 * var(--s));
+    padding: calc(22 * var(--s)) calc(32 * var(--s));
+    background:var(--lime);
+    border-radius:999px;
+    display:inline-flex;align-items:center;gap: calc(18 * var(--s));
+    color:#121212;
+    transition:transform .25s ease;
+  }
+  .section-apply .pitch:hover{transform:translateY(-2px)}
+  .section-apply .pitch .label{font-size: calc(22 * var(--s));font-weight:700}
+  .section-apply .pitch svg{
+    width: calc(20 * var(--s));height: calc(20 * var(--s));
+    fill:none;stroke:#0A0A0A;stroke-width:2.2;
+  }
+  .section-apply .chips{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(660 * var(--s));
+    display:inline-flex;gap: calc(12 * var(--s));
+  }
+  .section-apply .chip{
+    display:inline-flex;align-items:center;gap: calc(8 * var(--s));
+    padding: calc(9 * var(--s)) calc(14 * var(--s));
+    border:1px solid #404040;border-radius:999px;
+    font-size: calc(13 * var(--s));font-weight:500;
+  }
+  .section-apply .chip .dot{
+    width: calc(6 * var(--s));height: calc(6 * var(--s));
+    background:var(--lime);border-radius:50%;
+  }
+  .apply-panel{
+    position:absolute;
+    right: calc(96 * var(--s));
+    bottom: calc(72 * var(--s));
+    transform: translateY(30px);
+    width: calc(760 * var(--s));
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(28 * var(--s));
+  }
+  .apply-panel .kicker{color:#fff}
+  .apply-panel p{color:var(--dark-muted)}
+
+  /* === FOOTER ================================================= */
+  .footer{
+    position:relative;width:100%;
+    aspect-ratio: 1920 / 160;
+    background:var(--dark-bg);
+    color:#fff;overflow:hidden;
+  }
+  .footer .rule{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top:0;
+    width: calc(1728 * var(--s));
+    height:1px;background:var(--dark-line);
+  }
+  .footer .left{
+    position:absolute;
+    left: calc(96 * var(--s));
+    top: calc(56 * var(--s));
+    display:inline-flex;align-items:center;gap: calc(24 * var(--s));
+  }
+  .footer .brand{font-size: calc(28 * var(--s));font-weight:700}
+  .footer .slash{color:var(--dark-muted);font-size: calc(16 * var(--s))}
+  .footer .meta{color:var(--dark-muted);font-size: calc(14 * var(--s));font-weight:500}
+  .footer .nav{
+    position:absolute;
+    right: calc(96 * var(--s));
+    top: calc(56 * var(--s));
+    display:inline-flex;align-items:center;gap: calc(32 * var(--s));
+  }
+  .footer .nav a{font-size: calc(14 * var(--s));font-weight:500;transition:opacity .2s}
+  .footer .nav a:hover{opacity:.7}
+  .footer .copy{
+    position:absolute;
+    left: calc(96 * var(--s));
+    bottom: calc(32 * var(--s));
+    font-size: calc(12 * var(--s));color:var(--dark-muted);
+  }
+  .footer .where{
+    position:absolute;
+    right: calc(96 * var(--s));
+    bottom: calc(32 * var(--s));
+    text-align:right;
+    font-size: calc(12 * var(--s));color:var(--dark-muted);
+  }
+
+</style>
+</head>
+<body>
+
+<nav class="float-nav" id="floatNav" aria-label="Primary">
+  <a class="brand" data-scroll-target="top" role="button" tabindex="0">
+    forge®
+  </a>
+  <div class="links">
+    <a data-scroll-target="top" data-target="top" role="button" tabindex="0">Mission</a>
+    <a data-scroll-target="numbers" data-target="numbers" role="button" tabindex="0">Numbers</a>
+    <a data-scroll-target="process" data-target="process" role="button" tabindex="0">Process</a>
+    <a data-scroll-target="portfolio" data-target="portfolio" role="button" tabindex="0">Portfolio</a>
+    <a data-scroll-target="apply" data-target="apply" role="button" tabindex="0">Apply</a>
+  </div>
+  <a class="cta" data-scroll-target="apply" role="button" tabindex="0">
+    Pitch
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 7h10v10"/>
+      <path d="M7 17 17 7"/>
+    </svg>
+  </a>
+</nav>
+
+<main class="page">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero" id="top">
+    <div class="watermark">forge</div>
+
+    <div class="mission">
+      <span>Mission</span>
+    </div>
+
+    <p class="tagline">
+      We partner with<br>
+      founders from day one —<br>
+      from first sketch<br>
+      to first million users.
+    </p>
+
+    <h1 class="headline">Forging<br>bold<br>startups<br>that<br>scale</h1>
+
+    <a class="cta-pill" data-scroll-target="apply" role="button" tabindex="0">
+      <span class="circle">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/>
+          <path d="M13 5l7 7-7 7"/>
+        </svg>
+      </span>
+      <span class="label">Pitch your idea</span>
+    </a>
+
+    <aside class="accent-card">
+      <div class="brand">
+        <span>forge®</span>
+      </div>
+      <p>
+        We invest capital,<br>
+        design and engineering<br>
+        muscle into pre-seed<br>
+        teams worth backing.
+      </p>
+      <p class="bold">From idea to first 1,000<br>users in under 90 days.</p>
+      <div class="spacer"></div>
+      <a class="more" data-scroll-target="apply" role="button" tabindex="0">
+        Details
+        <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7h8"/>
+          <path d="M8 3l4 4-4 4"/>
+        </svg>
+      </a>
+    </aside>
+
+    <div class="est-badge">
+      <div class="lbl">Est.</div>
+      <div class="year">2024</div>
+      <div class="meta"><span>//</span><span>forge®</span></div>
+    </div>
+
+    <div class="stamp">Startup Studio<br>& Pre-seed Fund</div>
+  </header>
+
+  <!-- ===== THREAD ZONE (sections 01-03 with lime thread) ===== -->
+  <div class="thread-zone">
+
+    <!-- ===== SECTION 01 — NUMBERS ===== -->
+    <section class="section section-numbers" id="numbers">
+      <div class="eyebrow eyebrow-pos">
+        <span>01</span><span class="dash">—</span><span class="name">By the numbers</span>
+      </div>
+      <div class="meta-right">Snapshot — May 2026</div>
+      <h2>What we built<br>in year one.</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="rule"></div>
+          <div class="num">47</div>
+          <div class="lbl">Companies funded</div>
+          <div class="sub">since launch in 2024</div>
+        </div>
+        <div class="stat">
+          <div class="rule"></div>
+          <div class="num">$14M</div>
+          <div class="lbl">Portfolio ARR</div>
+          <div class="sub">active across 18 companies</div>
+        </div>
+        <div class="stat">
+          <div class="rule"></div>
+          <div class="num">90</div>
+          <div class="lbl">Days to first users</div>
+          <div class="sub">median from kickoff</div>
+        </div>
+        <div class="stat">
+          <div class="rule"></div>
+          <div class="num">8×</div>
+          <div class="lbl">Valuation lift</div>
+          <div class="sub">at next round (avg.)</div>
+        </div>
+      </div>
+
+      <div class="section-notes">
+        <div class="note">
+          <div class="kicker">Capital</div>
+          <p>Initial checks from $150k to $750k.<br>Follow-on reserved for teams with proof.<br>We fund product, distribution and hiring.<br>Terms stay founder-friendly from day one.</p>
+        </div>
+        <div class="note">
+          <div class="kicker">Build team</div>
+          <p>Product strategy, brand and UX in one pod.<br>Full-stack engineering ships the first version.<br>Analytics are wired before launch.<br>Every sprint ends with a usable artifact.</p>
+        </div>
+        <div class="note">
+          <div class="kicker">Distribution</div>
+          <p>Founder-led sales starts before the MVP.<br>Waitlists and partner channels are tested early.<br>Paid pilots validate urgency and pricing.<br>Launch plans focus on repeatable demand.</p>
+        </div>
+        <div class="note">
+          <div class="kicker">Follow-on</div>
+          <p>We shape the investor narrative with data.<br>Data rooms and metrics models stay current.<br>Warm intros begin once retention is visible.<br>Seed prep starts before the round opens.</p>
+        </div>
+      </div>
+
+      <div class="runway-strip">
+        <div class="runway-item">
+          <div class="runway-head"><span>01</span><span>Validate</span></div>
+          <p>Customer calls, ICP map, landing page and first demand signal.<br>Offer wedge, pricing signal and founder narrative.<br>Proof points are captured before building.</p>
+        </div>
+        <div class="runway-item">
+          <div class="runway-head"><span>02</span><span>Build</span></div>
+          <p>Prototype, MVP, analytics, onboarding and pricing test.<br>Product, brand and growth ship in one sprint loop.<br>Usage data shapes the next build cycle.</p>
+        </div>
+        <div class="runway-item">
+          <div class="runway-head"><span>03</span><span>Launch</span></div>
+          <p>First pilots, owned channels and founder-led sales motion.<br>Retention, activation and pipeline are reviewed weekly.<br>Seed materials are built from live evidence.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 02 — PROCESS ===== -->
+    <section class="section section-process" id="process">
+      <div class="eyebrow eyebrow-pos">
+        <span>02</span><span class="dash">—</span><span class="name">Process</span>
+      </div>
+      <div class="meta-right">Cycle: 0 → 1 in 90 days</div>
+
+      <h2 class="huge-title">How<br>we<br>forge.</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="n">01</div>
+          <div class="ttl">Discover</div>
+          <div class="txt">We sit with founders. Define the wedge,<br>find the first 100 users worth chasing.</div>
+          <svg class="arrow" viewBox="0 0 28 28" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 20 L20 8"/><path d="M10 8 H20 V18"/>
+          </svg>
+        </div>
+        <div class="step">
+          <div class="n">02</div>
+          <div class="ttl">Build</div>
+          <div class="txt">Design + engineering muscle. Prototype<br>to MVP in 4 weeks, not 4 months.</div>
+          <svg class="arrow" viewBox="0 0 28 28" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 20 L20 8"/><path d="M10 8 H20 V18"/>
+          </svg>
+        </div>
+        <div class="step">
+          <div class="n">03</div>
+          <div class="ttl">Launch</div>
+          <div class="txt">Go-to-market scaffolding. First 1,000<br>users in 6 weeks via owned channels.</div>
+          <svg class="arrow" viewBox="0 0 28 28" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 20 L20 8"/><path d="M10 8 H20 V18"/>
+          </svg>
+        </div>
+        <div class="step">
+          <div class="n">04</div>
+          <div class="ttl">Scale</div>
+          <div class="txt">Hands-on growth. Open the door to<br>seed once the wedge is proven.</div>
+          <svg class="arrow" viewBox="0 0 28 28" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 20 L20 8"/><path d="M10 8 H20 V18"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="process-card">
+        <div class="metric"><strong>0 → 1</strong><span>90 days</span></div>
+        <div class="mini-steps">
+          <div class="mini-step"><span>01</span><strong>Validate</strong></div>
+          <div class="mini-step"><span>02</span><strong>Build</strong></div>
+          <div class="mini-step"><span>03</span><strong>Launch</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 03 — PORTFOLIO ===== -->
+    <section class="section section-portfolio" id="portfolio">
+      <div class="eyebrow eyebrow-pos">
+        <span>03</span><span class="dash">—</span><span class="name">Portfolio</span>
+      </div>
+      <a class="view-all" data-scroll-target="portfolio" role="button" tabindex="0">
+        View all 18
+        <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7h8"/><path d="M8 3l4 4-4 4"/>
+        </svg>
+      </a>
+
+      <h2>Backed<br>by forge.</h2>
+
+      <div class="tiles">
+        <div class="tile">
+          <div class="mono">A</div>
+          <div class="badge">Seed</div>
+          <div class="metric">+340% YoY</div>
+          <div class="meta">
+            <div class="name">Atlas</div>
+            <div class="cat">DevTools</div>
+          </div>
+        </div>
+        <div class="tile lime">
+          <div class="mono">N</div>
+          <div class="badge">Pre-seed</div>
+          <div class="metric">12k devs</div>
+          <div class="meta">
+            <div class="name">Nimbus</div>
+            <div class="cat">AI Infra</div>
+          </div>
+        </div>
+        <div class="tile">
+          <div class="mono">R</div>
+          <div class="badge">Seed</div>
+          <div class="metric">$2.1M ARR</div>
+          <div class="meta">
+            <div class="name">Reach</div>
+            <div class="cat">Sales Ops</div>
+          </div>
+        </div>
+        <div class="tile">
+          <div class="mono">K</div>
+          <div class="badge">Pre-seed</div>
+          <div class="metric">84 pilots</div>
+          <div class="meta">
+            <div class="name">Kite</div>
+            <div class="cat">Climate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portfolio-details">
+        <div class="note">
+          <div class="kicker">Atlas</div>
+          <p>Developer observability suite for infra teams.<br>Forge rebuilt activation and trial onboarding.<br>Team sales motion moved into product.<br>Growth now compounds through usage loops.</p>
+        </div>
+        <div class="note">
+          <div class="kicker">Nimbus</div>
+          <p>AI infrastructure for internal tools.<br>Template-led growth brought in 12k developers.<br>Forge helped package examples and docs.<br>Community usage became the sales engine.</p>
+        </div>
+        <div class="note">
+          <div class="kicker">Reach</div>
+          <p>Sales operations workspace for revenue teams.<br>Moved from pilots to a repeatable contract path.<br>Forge tightened onboarding and pricing.<br>The business reached $2.1M ARR run-rate.</p>
+        </div>
+        <div class="note">
+          <div class="kicker">Kite</div>
+          <p>Climate procurement workflow for operators.<br>Enterprise pilots became a qualification engine.<br>Forge shaped the workflow and buyer story.<br>Pipeline quality improved before seed.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== SECTION 04 — APPLY ===== -->
+  <section class="section-apply" id="apply">
+    <div class="watermark-r">forge®</div>
+
+    <div class="eyebrow eyebrow-pos">
+      <span>04</span><span class="dash">—</span><span class="name">Apply</span>
+    </div>
+    <div class="status">
+      <span class="dot"></span>
+      <span>Open for pre-seed — Q3 2026</span>
+    </div>
+
+    <h2>Ready<br>to forge?</h2>
+
+    <p class="copy">If you're 0 → 1 with conviction, we want to hear<br>from you. We answer every pitch within 48 hours.</p>
+
+    <a class="pitch" data-mail="pitch@forge.studio" role="button" tabindex="0">
+      <span class="label">Send us your pitch</span>
+      <svg viewBox="0 0 22 22" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 11h12"/><path d="M11 5l6 6-6 6"/>
+      </svg>
+    </a>
+
+    <div class="chips">
+      <div class="chip"><span class="dot"></span>pitch@forge.studio</div>
+      <div class="chip"><span class="dot"></span>Office hours — Tue</div>
+      <div class="chip"><span class="dot"></span>Apply form</div>
+    </div>
+
+    <div class="apply-panel">
+      <div class="note">
+        <div class="kicker">We look for</div>
+        <p>Technical founders with unusual speed.<br>Urgent markets and clear buyer pain.<br>A wedge that can be tested in weeks.<br>Evidence beats polished storytelling.</p>
+      </div>
+      <div class="note">
+        <div class="kicker">Send with pitch</div>
+        <p>Deck or memo with the core thesis.<br>Product demo if anything is live.<br>Current metrics, cap table and runway.<br>Be clear about what you need next.</p>
+      </div>
+      <div class="note">
+        <div class="kicker">Decision path</div>
+        <p>First response within 48 hours.<br>Partner call, product review and diligence.<br>Founder references when needed.<br>Decision target is two weeks.</p>
+      </div>
+      <div class="note">
+        <div class="kicker">After yes</div>
+        <p>Capital arrives with embedded builders.<br>Weekly operating cadence starts immediately.<br>We help with product, growth and hiring.<br>Seed readiness is tracked from day one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="rule"></div>
+    <div class="left">
+      <span class="brand">forge®</span>
+      <span class="slash">//</span>
+      <span class="meta">Est. 2024</span>
+      <span class="slash">//</span>
+      <span class="meta">Startup Studio & Pre-seed Fund</span>
+    </div>
+    <nav class="nav" aria-label="Footer">
+      <a data-scroll-target="top" role="button" tabindex="0">Mission</a>
+      <a data-scroll-target="portfolio" role="button" tabindex="0">Portfolio</a>
+      <a data-scroll-target="process" role="button" tabindex="0">Process</a>
+      <a data-scroll-target="apply" role="button" tabindex="0">Pitch</a>
+      <a rel="noopener">Twitter ↗</a>
+      <a rel="noopener">LinkedIn ↗</a>
+    </nav>
+    <div class="copy">© 2026 forge studio. All rights reserved.</div>
+    <div class="where">Berlin · Lisbon · Remote</div>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  const nav = document.getElementById('floatNav');
+  const links = nav.querySelectorAll('.links a');
+  const ids = ['top','numbers','process','portfolio','apply'];
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+  const darkIds = new Set(['apply']);
+
+  function onScroll(){
+    const y = window.scrollY + window.innerHeight * 0.35;
+    let active = sections[0]?.id || 'top';
+    for (const s of sections){
+      const rect = s.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      if (top <= y) active = s.id;
+    }
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+    nav.classList.toggle('is-dark', darkIds.has(active));
+  }
+
+  let scrollFrame = null;
+  function easeInOut(t){
+    return 1 - Math.pow(1 - t, 2.16);
+  }
+  function smoothScrollTo(top){
+    if (scrollFrame) cancelAnimationFrame(scrollFrame);
+    const start = window.scrollY;
+    const distance = top - start;
+    const duration = 640;
+    const started = performance.now();
+    const previousSnap = document.documentElement.style.scrollSnapType;
+    const previousBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollSnapType = 'none';
+    document.documentElement.style.scrollBehavior = 'auto';
+
+    function tick(now){
+      const progress = Math.min((now - started) / duration, 1);
+      window.scrollTo(0, start + distance * easeInOut(progress));
+      if (progress < 1){
+        scrollFrame = requestAnimationFrame(tick);
+      } else {
+        document.documentElement.style.scrollSnapType = previousSnap;
+        document.documentElement.style.scrollBehavior = previousBehavior;
+        scrollFrame = null;
+      }
+    }
+    scrollFrame = requestAnimationFrame(tick);
+  }
+
+  function sectionTop(section){
+    return section.getBoundingClientRect().top + window.scrollY;
+  }
+  function currentSectionIndex(){
+    let index = 0;
+    let closest = Infinity;
+    sections.forEach((section, i) => {
+      const distance = Math.abs(section.getBoundingClientRect().top);
+      if (distance < closest){
+        closest = distance;
+        index = i;
+      }
+    });
+    return index;
+  }
+  function scrollSection(direction){
+    const index = currentSectionIndex();
+    const next = Math.max(0, Math.min(sections.length - 1, index + direction));
+    if (next === index) return;
+    smoothScrollTo(sectionTop(sections[next]));
+  }
+
+  window.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) < 12) return;
+    e.preventDefault();
+    if (scrollFrame) return;
+    scrollSection(e.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
+
+  window.addEventListener('keydown', (e) => {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '){
+      e.preventDefault();
+      if (!scrollFrame) scrollSection(e.shiftKey ? -1 : 1);
+    }
+    if (e.key === 'ArrowUp' || e.key === 'PageUp'){
+      e.preventDefault();
+      if (!scrollFrame) scrollSection(-1);
+    }
+    if (e.key === 'Home'){
+      e.preventDefault();
+      smoothScrollTo(sectionTop(sections[0]));
+    }
+    if (e.key === 'End'){
+      e.preventDefault();
+      smoothScrollTo(sectionTop(sections[sections.length - 1]));
+    }
+  });
+
+  document.querySelectorAll('[data-scroll-target]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('data-scroll-target');
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      const top = id === 'top' ? 0 : target.getBoundingClientRect().top + window.scrollY;
+      smoothScrollTo(top);
+    });
+    a.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      a.click();
+    });
+  });
+
+  document.querySelectorAll('[data-mail]').forEach(a => {
+    a.addEventListener('click', () => {
+      window.location.href = `mailto:${a.getAttribute('data-mail')}`;
+    });
+    a.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      a.click();
+    });
+  });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
